@@ -1,10 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <random>
-#include <algorithm> // Include for potential future use like shuffling or sorting
+#include <fstream> // Include for file operations
+#include <algorithm>
 
 int main() {
-    const size_t count = 100;
+    const size_t count = 999999;
     std::vector<int> numbers(count);
 
     // Seed the random number generator
@@ -19,16 +20,22 @@ int main() {
         numbers[i] = dist(gen);
     }
 
-    // Optional: Print the generated numbers
-    std::cout << "Generated 100 random numbers between 1 and 99:" << std::endl;
-    for (size_t i = 0; i < count; ++i) {
-        std::cout << numbers[i] << ( (i == count - 1) ? "" : ", ");
-        if ((i + 1) % 10 == 0) { // Newline every 10 numbers for readability
-             std::cout << std::endl;
-        }
+    // Open the output file
+    std::ofstream outFile("randomnumber.txt");
+    if (!outFile.is_open()) {
+        std::cerr << "Error opening file randomnumber.txt for writing." << std::endl;
+        return 1; // Indicate error
     }
-     std::cout << std::endl;
 
+    // Write the generated numbers to the file
+    std::cout << "Writing 100 random numbers between 1 and 99 to randomnumber.txt..." << std::endl;
+    for (size_t i = 0; i < count; ++i) {
+        outFile << numbers[i] << std::endl;
+    }
+
+    outFile.close(); // Close the file (good practice, though RAII handles it)
+
+    std::cout << "Finished writing to randomnumber.txt." << std::endl;
 
     return 0;
 }
